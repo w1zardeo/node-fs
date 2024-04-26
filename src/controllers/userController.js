@@ -1,5 +1,3 @@
-const express = require("express");
-
 let users = [];
 
 // Get all Users
