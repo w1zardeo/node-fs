@@ -18,12 +18,13 @@ exports.getUserById = (req, res) => {
 
 // Create new user
 exports.createUser = (req, res) => {
+  const { name, email, phone, age } = req.body;
   const newUser = {
     id: users.length + 1,
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    age: req.body.age,
+    name,
+    email,
+    phone,
+    age,
   };
   users.push(newUser);
   res.status(201).json(newUser);
@@ -32,30 +33,29 @@ exports.createUser = (req, res) => {
 // Update user
 exports.updateUser = (req, res) => {
   const userId = req.params.userId;
-  const userIndex = users.findIndex((user) => user.id === parseInt(userId));
-  if (userIndex !== -1) {
-    users[userIndex] = {
-      id: parseInt(userId),
-      name: req.body.name || users[userIndex].name,
-      email: req.body.email || users[userIndex].email,
-      phone: req.body.phone || users[userIndex].phone,
-      age: req.body.age || users[userIndex].age,
-    };
-    res.status(200).json(users[userIndex]);
+  const userToUpdate = users.find((user) => user.id === parseInt(userId));
+
+  if (userToUpdate) {
+    userToUpdate.name = req.body.name || userToUpdate.name;
+    userToUpdate.email = req.body.email || userToUpdate.email;
+    userToUpdate.phone = req.body.phone || userToUpdate.phone;
+    userToUpdate.age = req.body.age || userToUpdate.age;
+
+    res.status(200).json(userToUpdate);
   } else {
-    res.status(404).json({message: `Not found user with id ${userId}`})
+    res.status(404).json({ message: `Not found user with id ${userId}` });
   }
 };
 
 // Delete user
 exports.deleteUser = (req, res) => {
-    const userId = req.params.userId;
-    const userIndex = users.findIndex(user => user.id === parseInt(userId));
-    console.log(userIndex);
-    if (userIndex !== -1) {
-        users.splice(userIndex, 1);
-        res.status(204).json();
-    } else {
-        res.status(404).json({message: `Not found user with id ${userId}`})
-    }
-}
+  const userId = req.params.userId;
+  const userIndex = users.findIndex(user => user.id === parseInt(userId));
+
+  if (userIndex !== -1) {
+      users = users.filter((user, index) => index !== userIndex);
+      res.status(204).json();
+  } else {
+      res.status(404).json({ message: `Not found user with id ${userId}` });
+  }
+};
