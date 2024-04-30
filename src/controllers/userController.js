@@ -15,7 +15,7 @@ const getAllUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     const { id } = req.params;
-    const user = await getUsersById();
+    const user = await getUsersById(id);
     if (!user) {
         return next({
             status: statusCode.NOT_FOUND,
