@@ -1,7 +1,7 @@
 const asyncWrapper = (controller) => {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         try {
-            controller(req, res)
+            await controller(req, res)
         } catch (error) {
             next(error)
         }

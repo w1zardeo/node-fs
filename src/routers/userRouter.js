@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const { getAllUsers,
-    getUsers,
+    getUser,
     createUser,
     updateOneUser,
     deleteUser,
@@ -12,9 +12,9 @@ const { getAllUsers,
 const {asyncWrapper} = require('../helpers/apiHelpers');
 
 router.get('/', asyncWrapper(getAllUsers))
-router.get('/:id', asyncWrapper(getUsers))
+router.get('/:id', asyncWrapper(getUser))
 router.post('/', asyncWrapper(createUser))
-router.put('/:userId', asyncWrapper(updateOneUser))
-router.delete('/:postId', asyncWrapper(deleteUser))
+router.patch('/:userId', asyncWrapper(updateOneUser))
+router.delete('/:userId', asyncWrapper(deleteUser))
 
 module.exports = router;
