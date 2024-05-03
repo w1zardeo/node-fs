@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const userController = require('../controllers/userController');
+
 const { getAllUsers,
     getUser,
     createUser,
@@ -16,5 +18,7 @@ router.get('/:id', asyncWrapper(getUser))
 router.post('/', asyncWrapper(createUser))
 router.patch('/:userId', asyncWrapper(updateOneUser))
 router.delete('/:userId', asyncWrapper(deleteUser))
+
+router.post('/favorites/add/:movieId', userController.authMiddleware, userController.addFavoriteMovie);
 
 module.exports = router;

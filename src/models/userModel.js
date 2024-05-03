@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       min: 6,
-    }
+    },
+    favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
   },
   {
     versionKey: false,

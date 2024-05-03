@@ -5,7 +5,7 @@ const {
   ConflictException,
   BadRequestException,
 } = require('../helpers/exceptions');
-const { User } = require('../models/movieModel');
+const User = require('../models/userModel');
 
 const registerUser = async ({ email, password }) => {
   const existedUser = await User.findOne({ email });
