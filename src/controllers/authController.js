@@ -9,7 +9,6 @@ const registerUserController = async (req, res) => {
 
 const loginUserController = async (req, res) => {
   const body = req.body;
-  console.log({ body });
   const token = await loginUser(body);
   res.status(statusCode.OK).json({ status: 'success', token });
 };

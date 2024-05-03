@@ -47,21 +47,21 @@ const getUser = async (req, res, next) => {
 //     // }
 //   };
 
-  const getMe = async (req, res, next) => {
-    try {
+const getMe = async (req, res, next) => { // Додавання параметру next
+  try {
       const userId = req.user.id;
       const currentUser = await User.findById(userId);
-  
+
       if (!currentUser) {
-        return res.status(404).json({ status: 'fail', message: 'User not found' });
+          return res.status(404).json({ status: 'fail', message: 'User not found' });
       }
-  
+
       res.json({ status: 'success', data: currentUser });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
-      res.status(500).json({ status: 'error', message: 'Internal Server Error' });
-    }
-  };
+      next(error); // Передача помилки у next для обробки в обробнику помилок
+  }
+};
 
 const createUser = async (req, res, next) => {
     const newUser = await addUser(req.body);

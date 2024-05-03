@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post('/register', validate(schemaCreateUser), asyncWrapper(registerUserController));
 router.post('/login', validate(schemaCredentialsUser), asyncWrapper(loginUserController));
-router.get('/me', (authGuard, userController.getMe));
+router.get('/me', authGuard, userController.getMe);
 
 module.exports = router;
