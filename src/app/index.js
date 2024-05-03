@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const path = require('path');
 const userRouter = require('../routers/userRouter');
 const movieRouter = require('../routers/movieRouter');
+const authRouter = require('../routers/authRouter');
 const { statusCode } = require('../helpers/constants');
 const bodyParser = require('body-parser');
 
@@ -26,6 +27,7 @@ app.use(morgan('tiny'));
 
 app.use('/movies', movieRouter)
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
 //handle not found errors
 app.use((_, res) => {
