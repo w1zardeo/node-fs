@@ -30,23 +30,24 @@ const getUser = async (req, res, next) => {
     res.status(statusCode.OK).json(user)
 }
   
-const authMiddleware = (req, res, next) => {
-    const token = req.headers.authorization;
+// const authMiddleware = (req, res, next) => {
+//     const token = req.headers.authorization;
   
-    if (!token) {
-      return res.status(401).json({ status: 'fail', message: 'Token is required' });
-    }
-  
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-      next(); 
-    } catch (error) {
-      return res.status(401).json({ status: 'fail', message: 'Invalid token' });
-    }
-  };
+//     if (!token) {
+//       return res.status(401).json({ status: 'fail', message: 'Token is required' });
+//     }
+//     console.log(decoded);
+//     // try {
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//       console.log(decoded);
+//       // req.user = decoded;
+//       // next(); 
+//     // } catch (error) {
+//     //   return res.status(401).json({ status: 'fail', message: 'Invalid token' });
+//     // }
+//   };
 
-  const getMe = async (req, res) => {
+  const getMe = async (req, res, next) => {
     try {
       const userId = req.user.id;
       const currentUser = await User.findById(userId);
@@ -127,6 +128,5 @@ module.exports = {
     updateOneUser,
     deleteUser,
     getMe,
-    authMiddleware,
     addFavoriteMovie
 }
