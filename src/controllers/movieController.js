@@ -1,6 +1,8 @@
 const {
     getMovies,
-    getMovieById
+    getMovieById,
+    addToFavourites,
+    getFavoriteMovies
 } = require('../services/movieService');
 
 const { statusCode } = require('../helpers/constants');
@@ -22,7 +24,26 @@ const getMovie = async (req, res, next) => {
     res.status(statusCode.OK).json(movie)
 }
 
+const addFavouriteMovie =  async (req, res) => {
+    const {email, movieId} = req.body;
+
+    const updatedFavourites = await addToFavourites(email, movieId)
+    res.status(statusCode.OK).send(updatedFavourites)
+}
+
+const getUserFavoriteMovies = async (req, res) => {
+    // try {
+        const userId = req.user._id; // Отримуємо userId з авторизованого користувача
+        const favoriteMovies = await getFavoriteMovies(userId);
+        res.status(200).json({ favoriteMovies });
+    // } catch (error) {
+    //     res.status(500).json({ error: error.message });
+    // }
+}
+
 module.exports = {
     getAllMovies,
-    getMovie    
+    getMovie,
+    addFavouriteMovie,
+    getUserFavoriteMovies
 }

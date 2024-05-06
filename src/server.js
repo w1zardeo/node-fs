@@ -17,7 +17,6 @@ const startServer = async () => {
     try {
         await connectDb();
         app.listen(PORT, (err) => {
-            // console.log(PORT);
             if (err) {
                 console.log('Error at server launch', err);
             }

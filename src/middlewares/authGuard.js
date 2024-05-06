@@ -1,12 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { UnauthorizedException } = require('../helpers/exceptions');
-const { User } = require('../models/userModel');
-
-const JWT_SECRET = process.env.JWT_SECRET;
+const User = require('../models/userModel');
 
 // Bearer token
 
 const authGuard = async (req, res, next) => {
+  const JWT_SECRET = process.env.JWT_SECRET;
   try {
     const token = req.headers?.authorization?.split(' ')[1];
     if (!token) {
