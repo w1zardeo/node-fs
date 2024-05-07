@@ -1,14 +1,48 @@
 const Movie = require('../models/movieModel');
 const User = require('../models/userModel');
+const { validateSkipAndLimit, validateSort, validateSortOrder } = require('../middlewares/filters');
 
-const getMovies = async () => {
-    try {
-        const movies = await Movie.find();
-        return movies;
-    } catch (error) {
-        throw error;
-    }
-}
+// const getMovies = async () => {
+//     try {
+//         const movies = await Movie.find();
+//         return movies;
+//     } catch (error) {
+//         throw error;
+//     }
+// }
+
+const getMovies = async (queryParams) => {
+    const { skip = 0, limit = 10, sort, sortOrder, search } = queryParams;
+
+    if (!validateSkipAndLimit(skip, limit)) {
+        throw new Error('Invalid skip or limit parameters');
+      }
+    
+      let sortOptions = {};
+      if (sort && sortOrder) {
+        if (!validateSort(sort)) {
+          throw new Error('Invalid sort parameter');
+        }
+        if (!validateSortOrder(sortOrder)) {
+          throw new Error('Invalid sortOrder parameter');
+        }
+        sortOptions[sort] = sortOrder === 'desc' ? -1 : 1;
+      }
+
+      let searchQuery = {};
+  if (search) {
+    searchQuery = { name: { $regex: new RegExp(search, 'i') } };
+  }
+
+  const totalItems = await Movie.countDocuments(searchQuery);
+  const movies = await Movie.find(searchQuery)
+    .sort(sortOptions)
+    .skip(parseInt(skip))
+    .limit(parseInt(limit));
+
+  return { items: movies, meta: { skip, limit, totalItems } };
+  
+} 
 
 const getMovieById = async (userId) => {
     try {

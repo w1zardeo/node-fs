@@ -4,7 +4,11 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -13,19 +17,24 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    phone: {
-      type: String,
+    // phone: {
+    //   type: String,
       // required: true,
       // unique: true,
-    },
-    number: {
-      type: Number,
+    // },
+    // number: {
+      // type: Number,
       // required: true,
-    },
+    // },
     password: {
       type: String,
       required: true,
       min: 6,
+    },
+    confirmed: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
   },

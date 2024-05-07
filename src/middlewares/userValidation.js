@@ -7,9 +7,9 @@ const schemaCreateUser = Joi.object({
       tlds: { allow: false },
     })
     .required(),
-  // password: Joi.string().min(6).max(18).required(),
+  password: Joi.string().min(6).max(18).required(),
   firstName: Joi.string().alphanum().min(2).required(),
-  lastName: Joi.string().alphanum().min(2).required(),
+  lastName: Joi.string().alphanum().min(2).required(),  
 });
 
 const schemaCredentialsUser = Joi.object({

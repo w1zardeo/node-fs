@@ -7,9 +7,36 @@ const {
 
 const { statusCode } = require('../helpers/constants');
 
-const getAllMovies = async (req, res, next) => {
-    const movies = await getMovies();
-    res.status(statusCode.OK).json(movies);
+const { validateSkipAndLimit, validateSort, validateSortOrder } = require('../middlewares/filters');
+
+// const getAllMovies = async (req, res, next) => {
+//     const movies = await getMovies();
+//     res.status(statusCode.OK).json(movies);
+
+// }
+
+const getAllMovies = async (req, res) => {
+    try {
+        const { skip, limit, sort, sortOrder, search } = req.query;
+    
+        if (!validateSkipAndLimit(skip, limit)) {
+          return res.status(400).json({ error: 'Invalid skip or limit parameters' });
+        }
+    
+        if (sort && !validateSort(sort)) {
+          return res.status(400).json({ error: 'Invalid sort parameter' });
+        }
+    
+        if (sortOrder && !validateSortOrder(sortOrder)) {
+          return res.status(400).json({ error: 'Invalid sortOrder parameter' });
+        }
+    
+        const result = await getMovies({ skip, limit, sort, sortOrder, search });
+        res.json(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
 }
 
 const getMovie = async (req, res, next) => {
@@ -41,9 +68,52 @@ const getUserFavoriteMovies = async (req, res) => {
     // }
 }
 
+const aggregateMovies = async () => {
+    const uri = "mongodb+srv://Andrii:b1eojrt5tbBLNpwY@cluster-homework-3.k8jde5n.mongodb.net/"; // замініть на ваші дані
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  
+    try {
+      await client.connect();
+  
+      const database = client.db("Movies-libraries"); // вкажіть ім'я вашої бази даних
+      const moviesCollection = database.collection('movies'); // замініть 'movies' на назву вашої колекції
+  
+      const aggregationResult = await moviesCollection.aggregate([
+        { $match: { year: { $gt: 1994 } } },
+        { 
+          $group: { 
+            _id: "$genre", 
+            movies: { $push: "$$ROOT" },
+            averageRating: { $avg: "$rating" },
+            totalViews: { $sum: "$views" },
+            count: { $sum: 1 }
+          } 
+        },
+        { 
+          $project: {
+            _id: 0, 
+            genre: "$_id", 
+            movies: 1, 
+            averageRating: 1, 
+            totalViews: 1, 
+            count: 1
+          } 
+        }
+      ]).toArray();
+  
+      console.log(aggregationResult);
+  
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      await client.close();
+    }
+  }
+
 module.exports = {
     getAllMovies,
     getMovie,
     addFavouriteMovie,
-    getUserFavoriteMovies
+    getUserFavoriteMovies,
+    aggregateMovies
 }
