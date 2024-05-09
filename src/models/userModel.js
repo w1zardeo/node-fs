@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    avatarURL: {
+      type: String
+    },
     favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
   },
   {

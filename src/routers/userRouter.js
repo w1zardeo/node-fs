@@ -11,6 +11,8 @@ const { getAllUsers,
     deleteUser,
 } = require('../controllers/userController');
 
+const {authGuard} = require('../middlewares/authGuard');
+
 const {asyncWrapper} = require('../helpers/apiHelpers');
 
 router.get('/', asyncWrapper(getAllUsers))

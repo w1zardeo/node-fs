@@ -12,10 +12,10 @@ const { getAllMovies,
 const {authGuard} = require('../middlewares/authGuard')
 
 router.get('/', getAllMovies)
+router.get('/movie_stats', aggregateMovies)
 router.get('/:id', getMovie)
 router.post('/favorites/addToFavourite', authGuard, addFavouriteMovie);
 router.get('/favorites/getMovies', authGuard, getUserFavoriteMovies);
-router.get('/aggregate', aggregateMovies)
 
 
 module.exports = router;

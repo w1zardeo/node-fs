@@ -121,6 +121,8 @@ const addFavoriteMovie = async (req, res) => {
     }
   };
 
+
+
 module.exports = {
     getAllUsers,
     getUser,

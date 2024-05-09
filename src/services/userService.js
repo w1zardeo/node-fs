@@ -45,6 +45,7 @@ const removeUser = async (userId) => {
     }
 }
 
+
 module.exports = {
     getUsers,
     getUsersById,

@@ -67,8 +67,8 @@ const sendVerificationEmail = async (email, code) => {
 
 const sendForgotPasswordEmail = async (email, code) => { 
   try {
-  const verificationLink = `http://localhost:${PORT}/auth/verify/${code}`;
-  const html = `<p>To verify your email please click on <a href="${verificationLink}">link</a></p>`;
+  const forgotVerificationLink = `http://localhost:${PORT}/auth/verify/${code}`;
+  const html = `<p>To reset your email please click on <a href="${forgotVerificationLink}">link</a></p>`;
     const info = await send({from: SENDER, to: email, text: 'Verify your email', subject: 'Email verification', html });    
     console.log(info);
   } catch (error) {

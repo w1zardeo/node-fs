@@ -8,6 +8,7 @@ const {
 const { statusCode } = require('../helpers/constants');
 
 const { validateSkipAndLimit, validateSort, validateSortOrder } = require('../middlewares/filters');
+const Movie = require('../models/movieModel');
 
 // const getAllMovies = async (req, res, next) => {
 //     const movies = await getMovies();
@@ -17,7 +18,7 @@ const { validateSkipAndLimit, validateSort, validateSortOrder } = require('../mi
 
 const getAllMovies = async (req, res) => {
     try {
-        const { skip, limit, sort, sortOrder, search } = req.query;
+        const { skip = 0, limit = 10, sort, sortOrder, search } = req.query;
     
         if (!validateSkipAndLimit(skip, limit)) {
           return res.status(400).json({ error: 'Invalid skip or limit parameters' });
@@ -68,17 +69,9 @@ const getUserFavoriteMovies = async (req, res) => {
     // }
 }
 
-const aggregateMovies = async () => {
-    const uri = "mongodb+srv://Andrii:b1eojrt5tbBLNpwY@cluster-homework-3.k8jde5n.mongodb.net/"; // замініть на ваші дані
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const aggregateMovies = async (req, res) => {
   
-    try {
-      await client.connect();
-  
-      const database = client.db("Movies-libraries"); // вкажіть ім'я вашої бази даних
-      const moviesCollection = database.collection('movies'); // замініть 'movies' на назву вашої колекції
-  
-      const aggregationResult = await moviesCollection.aggregate([
+      const movies = await Movie.aggregate([
         { $match: { year: { $gt: 1994 } } },
         { 
           $group: { 
@@ -99,15 +92,8 @@ const aggregateMovies = async () => {
             count: 1
           } 
         }
-      ]).toArray();
-  
-      console.log(aggregationResult);
-  
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      await client.close();
-    }
+      ])
+      res.json({movies})
   }
 
 module.exports = {

@@ -7,6 +7,7 @@ const statusCode = {
     SERVICE_UNVALIABLE: 503
 }
 
+
 module.exports = {
-    statusCode
+  statusCode
 }
