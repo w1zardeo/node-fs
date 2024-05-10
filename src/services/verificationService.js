@@ -15,7 +15,7 @@ const generateHash = (userParam) => {
 }
 
 const removeUserVerificationsCode = async (userId) => { 
-    await Verification.deleteMany({ active: false, userId });
+    await Verification.deleteMany({userId });
 }
 
 module.exports = {createVerificationCode, generateHash};

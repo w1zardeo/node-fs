@@ -8,7 +8,8 @@ const {
     getUsersById,
     addUser,
     updateUser,
-    removeUser
+    removeUser,
+    updateAvatar
 } = require('../services/userService');
 
 const { statusCode } = require('../helpers/constants');
@@ -121,6 +122,17 @@ const addFavoriteMovie = async (req, res) => {
     }
   };
 
+  const updateUserAvatarController = async (req, res) => {
+    const id = req.user._id;
+    
+    console.log({FILE: req.file})
+  
+    const avatarURL = await updateAvatar(id, req.file);
+    res.json({ avatarURL });
+  };
+
+
+
 module.exports = {
     getAllUsers,
     getUser,
@@ -128,5 +140,6 @@ module.exports = {
     updateOneUser,
     deleteUser,
     getMe,
-    addFavoriteMovie
+    addFavoriteMovie,
+    updateUserAvatarController
 }

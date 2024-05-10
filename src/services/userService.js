@@ -1,4 +1,9 @@
+const path = require('path');
+const fs = require('fs/promises');
+
 const User = require('../models/userModel');
+
+const {finalAvatarsFolder} = require('../helpers/constants');
 
 const getUsers = async () => {
     try {
@@ -45,10 +50,31 @@ const removeUser = async (userId) => {
     }
 }
 
+const saveUserAvatar = async (file) => {
+    const pathName = file.path;
+    const newAvatar = file.originalname;
+    try {
+      await fs.rename(pathName, path.join(`${finalAvatarsFolder}`, newAvatar));
+    } catch (error) {
+      await fs.unlink(pathName);
+      throw error;
+    }
+    return path.join(process.env.AVATARS_FOLDER, newAvatar).replace('\\', '/');
+  };
+  
+  
+  const updateAvatar = async (userId, file) => {
+    const avatarURL = await saveUserAvatar(file);
+    await User.findByIdAndUpdate(userId, { avatarURL }, { new: true });
+    return avatarURL;
+  };
+
 module.exports = {
     getUsers,
     getUsersById,
     addUser,
     updateUser,
-    removeUser
+    removeUser,
+    saveUserAvatar,
+    updateAvatar
 }
