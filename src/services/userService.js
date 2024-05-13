@@ -59,7 +59,7 @@ const saveUserAvatar = async (file) => {
       await fs.unlink(pathName);
       throw error;
     }
-    return path.join(process.env.AVATARS_FOLDER, newAvatar).replace('\\', '/');
+    return path.join(process.env.AVATARS_FOLDERS, newAvatar).replace('\\', '/');
   };
   
   

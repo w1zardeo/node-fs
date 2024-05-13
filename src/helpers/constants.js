@@ -1,4 +1,5 @@
 const path = require('path');
+const dotenv = require('dotenv');
 
 const statusCode = {
     OK: 200,
@@ -8,6 +9,8 @@ const statusCode = {
     INTERNAL_SERVER_ERROR: 500,
     SERVICE_UNVALIABLE: 503
 }
+
+dotenv.config({path});
 
 const temporaryAvatarsFolder = path.join(process.cwd(), process.env.UPLOAD_DIR || 'tmp');
 const finalAvatarsFolder = path.join(
