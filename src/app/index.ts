@@ -1,26 +1,19 @@
-const express = require('express');
-const app = express();
-const morgan = require('morgan');
-const path = require('path');
-const userRouter = require('../routers/userRouter');
-const movieRouter = require('../routers/movieRouter');
-const authRouter = require('../routers/authRouter');
-const { statusCode } = require('../helpers/constants');
-const bodyParser = require('body-parser');
+import express from 'express';
+import morgan from 'morgan';
+import path from 'path';
+import userRouter from '../routers/userRouter';
+import movieRouter from '../routers/movieRouter';
+import authRouter from '../routers/authRouter';
+import { statusCode } from '../helpers/constants';
+import bodyParser from 'body-parser';
 
-require('dotenv').config();
+// require('dotenv').config();
+
+const app = express();
 
 app.use(bodyParser.json());
 
-// const PORT = process.env.PORT || 3000;
-// const port = 3000
-
-// app.listen(port, (err) => {
-// if (err) {
-// console.log(err)
-// }
-//   console.log(`Server running on port ${port}`) 
-// })
+const PORT: number = 3000;
 
 app.use(express.json());
 app.use(morgan('tiny'));
@@ -39,7 +32,7 @@ app.use((_, res) => {
 });
 
 //handle all other errors 
-app.use((err, _, res, next) => {
+app.use((err: any, _: any, res: any, next: any) => {
   err.status = err.status ? err.status : statusCode.INTERNAL_SERVER_ERROR;
   res.status(err.status).json({
     status: err.status === 500 ? 'fail' : 'error',
@@ -49,4 +42,4 @@ app.use((err, _, res, next) => {
   });
 });
 
-module.exports = app;
+export default app;

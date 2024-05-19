@@ -1,23 +1,20 @@
-const express = require('express');
-// const app = express();
-const path = require('path');
-
-const app = require('./app');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+import express from 'express';
+import path from 'path';
+import app from './app';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 dotenv.config({path: './.env'});
 
-const {connectDb} = require('./db/connection');
+import {connectDb} from './db/connection';
 
-// const PORT = process.env.PORT || 3000;
-const PORT = 3000
+const PORT: number = 3000;
 
 const startServer = async () => {
     try {
         await connectDb();
-        app.listen(PORT, (err) => {
+        app.listen(PORT, (err: any) => {
             if (err) {
                 console.log('Error at server launch', err);
             }
